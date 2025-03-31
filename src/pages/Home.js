@@ -1,12 +1,22 @@
 import React from "react";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import MuiLink from "@mui/material/Link";
+
+import { Link } from 'react-router-dom';
 
 function Home() {
   return (
-    <div>
-      <h1>SPS REACT TEST</h1>
+    <Container>
+      <Typography variant="h1">SPS REACT TEST</Typography>
 
-      <a href="/users">Usuários</a>
-    </div>
+      <MuiLink
+        to="/users"
+        component={Link}
+      >
+        <Typography>Usuários</Typography>
+      </MuiLink>
+    </Container>
   );
 }
 

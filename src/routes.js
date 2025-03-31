@@ -1,23 +1,34 @@
-import { createBrowserRouter } from "react-router-dom";
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import { useUser } from './hooks/useUser'
 
-import Home from "./pages/Home";
-import Users from "./pages/Users";
-import UserEdit, { userLoader } from "./pages/UserEdit";
+import Home from './pages/Home';
+import Users from "./pages/users";
+import UserEdit from "./pages/userEdit";
+import SignIn from "./pages/signIn";
+import UserCreate from "./pages/userCreate";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/users",
-    element: <Users />,
-  },
-  {
-    path: "/users/:userId",
-    element: <UserEdit />,
-    loader: userLoader,
-  },
-]);
+const Router = () => {
+  const { user } = useUser();
 
-export default router;
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      {user ? (
+        <>
+          <Route path="/users" element={<Users />} />
+          <Route path="/users/:userId" element={<UserEdit />} />
+          <Route path="/users/new" element={<UserCreate />} />
+          <Route path="*" element={<Users />} />
+        </>
+      ) : (
+        <>
+          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="*" element={<SignIn />}  />
+        </>
+      )}
+    </Routes>
+  )
+}
+
+export default Router;
