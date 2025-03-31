@@ -21,9 +21,9 @@ const DeleteUserDialog = ({ isVisible, onClose, onConfirm, userName }) => (
       </DialogContentText>
     </DialogContent>
     <DialogActions>
-      <Button onClick={onClose}>Disagree</Button>
+      <Button onClick={onClose}>Cancelar</Button>
       <Button onClick={onConfirm} autoFocus color='error'>
-        Agree
+        Confirmar
       </Button>
     </DialogActions>
   </Dialog>

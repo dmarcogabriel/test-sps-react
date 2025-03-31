@@ -9,12 +9,14 @@ import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useSnackbar } from '../../hooks/useSnackbar';
 
 import DeleteUserDialog from "./DeleteUserDialog";
 
-function UserItem ({ user }) { 
+function UserItem ({ user, onUserDelete }) {
   const navigate = useNavigate();
   const [isDeleteModalVisible, setIsDeleteModalVisible] = React.useState(false)
+  const { showSnackbar } = useSnackbar();
 
   const handleEditUser = () => {
     navigate(`/users/${user.id}`)
@@ -28,9 +30,13 @@ function UserItem ({ user }) {
     try {
       const message = await deleteUser(user.id);
 
-      // todo: show message
+      showSnackbar({ message, severity: "success" });
+      onUserDelete();
     } catch (e) {
-      // todo: show error message
+      showSnackbar({
+        message: "Erro ao tentar remover usuário, tente novamente mais tarde.",
+        severity: "error"
+      });
     }
 
     handleCloseDeleteModal();

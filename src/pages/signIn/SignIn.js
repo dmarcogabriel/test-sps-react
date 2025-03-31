@@ -15,14 +15,14 @@ import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import ErrorDialog from '../../components/ErrorAlert';
+import { useSnackbar } from '../../hooks/useSnackbar';
 
 const SignIn = () => {
   const [values, setValues] = React.useState({ email: 'admin@spsgroup.com.br', password: '1234' });
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
-  const [error, setError] = React.useState("");
   const { signIn } = useUser();
   const navigate = useNavigate();
+    const { showSnackbar } = useSnackbar();
 
   const handleChange = useCallback((field) => ({ target: { value } }) => {
     setValues(prevValues => ({...prevValues, [field]: value }));
@@ -38,12 +38,11 @@ const SignIn = () => {
       signIn(user);
       navigate('/users')
     } catch (e) {
-      setError("Usuário ou Senha incorretos.");
+      showSnackbar({
+        message: "Usuário ou Senha incorretos.",
+        severity: "error"
+      });
     }
-  }
-
-  const handleCloseErrorDialog = () => {
-    setError(null);
   }
 
   return (
@@ -90,12 +89,6 @@ const SignIn = () => {
           </Button>
         </Card>
       </Box>
-
-      <ErrorDialog
-        isVisible={error}
-        message={error}
-        onClose={handleCloseErrorDialog}
-      />
     </Container>
   );
 }

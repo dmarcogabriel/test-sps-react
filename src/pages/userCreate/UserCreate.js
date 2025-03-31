@@ -12,7 +12,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { createUser } from '../../services/users.service';
-import ErrorDialog from '../../components/ErrorAlert';
+import { useSnackbar } from '../../hooks/useSnackbar';
 
 function UserCreate () {
   const [values, setValues] = React.useState({
@@ -21,8 +21,8 @@ function UserCreate () {
     password: '',
     type: 'user'
   });
-  const [hasError, setHasError] = React.useState(false);
   const navigate = useNavigate();
+  const { showSnackbar } = useSnackbar();
 
   const handleChange = React.useCallback((field) => ({ target }) => {
     setValues(prevValues => ({ ...prevValues, [field]: target.value }));
@@ -31,14 +31,14 @@ function UserCreate () {
   const handleSubmit = async () => {
     try {
       const message = await createUser(values);
+      showSnackbar({ message, severity: "success" });
       navigate(-1);
     } catch (e) {
-      setHasError(true);
+      showSnackbar({
+        message: "Erro ao tentar criar usuário. Tente novamente mais tarde.",
+        severity: "error"
+      });
     }
-  }
-
-  const handleCloseErrorDialog = (_ev, reason) => {
-    setHasError(false);
   }
 
   return (
@@ -85,12 +85,6 @@ function UserCreate () {
           </Button>
         </Card>
       </Box>
-
-      <ErrorDialog
-        isVisible={hasError}
-        message="Erro ao tentar criar usuário. Tente novamente mais tarde."
-        onClose={handleCloseErrorDialog}
-      />
     </Container>
   )
 }
